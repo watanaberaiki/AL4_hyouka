@@ -140,6 +140,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	plane.normal = XMVectorSet(0, 1, 0, 0); //法線ベクトル
 	plane.distance = 0.0;
 
+
 	//判定
 	bool isHit = false;
 
