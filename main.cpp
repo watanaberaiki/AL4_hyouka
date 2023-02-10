@@ -139,7 +139,12 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	Plane plane;
 	plane.normal = XMVectorSet(0, 1, 0, 0); //法線ベクトル
 	plane.distance = 0.0;
-
+	//三角形判定
+	Triangle triangle;
+	triangle.p0 = XMVectorSet(-1.0f, 0, -1.0f, 1); //左手前
+	triangle.p1 = XMVectorSet(-1.0f, 0, +1.0f, 1); //左奥
+	triangle.p2 = XMVectorSet(+1.0f, 0, -1.0f, 1); //右手前
+	triangle.normal = XMVectorSet(0.0f, 1.0f, 0.0f, 0); //上向き
 	//判定
 	bool isHit = false;
 
