@@ -128,7 +128,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	//プレイヤー座標保存用
 	DirectX::XMFLOAT3 playerPosition;
 	planeobj->SetPosition({ 0,0,0 });
-	planeobj->SetScale({ 10.0f,1.0f,10.0f });
+	planeobj->SetScale({ 100.0f,1.0f,10.0f });
 
 
 	//球判定
@@ -143,6 +143,16 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 	//判定
 	bool isHit = false;
+
+	//重力
+	const float gravity = 0.05f;
+
+	//ジャンプ
+	float jumpspeed =0.0f;
+	float highjump = 0.8f;
+	float normaljump = 0.6f;
+	float lowjump = 0.3f;
+	int jumpCount = 0;
 
 	//ビュー変換行列
 	XMMATRIX matView;
@@ -175,15 +185,31 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		input->Update();
 
 		XMFLOAT3 spherepos = sphereobj->GetPosition();
+
 		//移動
-		if (input->PushKey(DIK_W) || input->PushKey(DIK_S)) {
-			if (input->PushKey(DIK_W)) {
-				spherepos.y += 0.01;
+		if (input->PushKey(DIK_A) || input->PushKey(DIK_D)) {
+			if (input->PushKey(DIK_A)) {
+				spherepos.x -= 0.05;
+
 			}
-			else if (input->PushKey(DIK_S)) {
-				spherepos.y -= 0.01;
+			else if (input->PushKey(DIK_D)) {
+				spherepos.x += 0.05;
+
 			}
 		}
+		if (isHit == true) {
+			jumpspeed = 0;
+			if (input->PushKey(DIK_SPACE)) {
+				jumpspeed = normaljump;
+				spherepos.y += jumpspeed;
+			}
+		}
+		else if (isHit == false) {
+			jumpspeed -= gravity;
+			spherepos.y += jumpspeed;
+		}
+
+
 		sphereobj->SetPosition(spherepos);
 		sphere.center = XMVectorSet(sphereobj->GetPosition().x, sphereobj->GetPosition().y, sphereobj->GetPosition().z, 1);
 		//当たり判定
@@ -196,7 +222,10 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		else {
 			isHit = false;
 		}
+		
+		sphereobj->SetPosition(spherepos);
 
+		matView = DirectX::XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up));
 		sphereobj->Update(matView);
 		planeobj->Update(matView);
 

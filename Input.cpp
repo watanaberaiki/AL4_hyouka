@@ -59,3 +59,11 @@ bool Input::TriggerKey(BYTE keyNumber)
 
 	return false;
 }
+
+bool Input::released(BYTE keyNumber)
+{
+	if (keyPre[keyNumber] && key[keyNumber] == false) {
+		return true; 
+	}
+	return false;
+}

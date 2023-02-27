@@ -26,7 +26,8 @@ public://メンバ関数
 	bool PushKey(BYTE keyNumber);
 	//キートリガーチェック
 	bool TriggerKey(BYTE keyNumber);
-
+	//キーリリースチェック
+	bool released(BYTE keyNumber);
 private://メンバ変数
 	//キー
 	BYTE key[256] = {};
